@@ -25,7 +25,7 @@ SECRET_KEY = 'tsg0g+91aj81upxa%8n#@@8g)#+0+hm3_uw3$)69l01g+ptkzf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 
 ]
 
-FILE_UPLOAD_TEMP_DIR="/tmp/uploaded_content"
+FILE_UPLOAD_TEMP_DIR = "/tmp/uploaded_content"
 
 
 FILE_UPLOAD_HANDLERS=[
@@ -58,7 +58,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'api.request_control_middleware.AuthMiddleware'
 ]
+
+REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES' : ["api.http_header_auth.HttpHeaderAuthentication"],
+  'DEFAULT_PERMISSION_CLASSES': ( 'rest_framework.permissions.IsAuthenticated', ) 
+}
 
 ROOT_URLCONF = 'api.urls'
 
@@ -84,14 +90,24 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-
 DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'capm',
+        'USER': 'db_user',
+        'PASSWORD': 'db_password',
+        'HOST': '192.168.1.134',
+        'PORT': '3306',
+    }
+}
+
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
+"""
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 

@@ -59,13 +59,13 @@ class UploadView(APIView):
             users = entry['uNumbers']
             role_master.role_name = role
             role_master.status = 'Y'
-            role_master.mapping_id = mapping_master
+            role_master.mapping = mapping_master
             role_master.save()
             for user_unumber in users:
                 ura = UserRoleAssociation()
-                ura.role_id = role_master
-                ura.user_id = user_unumber
-                ura.mapping_id = mapping_master
+                ura.role = role_master
+                ura.user = user_unumber
+                ura.mapping = mapping_master
                 ura.status = 'Y'
                 ura.save()
 

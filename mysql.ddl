@@ -1,14 +1,14 @@
+drop database `capm`;
+
+CREATE USER 'db_user'@'%' identified by 'db_password';
+GRANT ALL PRIVILEGES ON capm.* TO 'db_user'@'%';
+create database `capm`;
+
 CREATE TABLE `capm`.`role_master` (
   `role_id` INT NOT NULL AUTO_INCREMENT,
   `role_name` VARCHAR(45) NULL,
   `status` VARCHAR(1) NULL,
   PRIMARY KEY (`role_id`));
-
-CREATE TABLE `capm`.`user_master` (
-  `user_id` VARCHAR(7) NOT NULL,
-  `name` VARCHAR(45) NULL,
-  `status` VARCHAR(1) NULL DEFAULT 'T',
-  PRIMARY KEY (`user_id`));
 
 CREATE TABLE `capm`.`user_role_assoc` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -31,11 +31,6 @@ ADD INDEX `URA_ROLE_FK_idx` (`role_id` ASC) VISIBLE,
 ADD INDEX `URA_MAPPING_FK_idx` (`mapping_id` ASC) VISIBLE;
 ;
 ALTER TABLE `capm`.`user_role_assoc`
-ADD CONSTRAINT `URA_USER_FK`
-  FOREIGN KEY (`user_id`)
-  REFERENCES `capm`.`user_master` (`user_id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
 ADD CONSTRAINT `URA_ROLE_FK`
   FOREIGN KEY (`role_id`)
   REFERENCES `capm`.`role_master` (`role_id`)
@@ -46,19 +41,6 @@ ADD CONSTRAINT `URA_MAPPING_FK`
   REFERENCES `capm`.`mapping_master` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
-
-
-ALTER TABLE `capm`.`user_master`
-ADD COLUMN `mapping_id` INT NULL AFTER `status`,
-ADD INDEX `USER_MAPPING_FK_idx` (`mapping_id` ASC) VISIBLE;
-;
-ALTER TABLE `capm`.`user_master`
-ADD CONSTRAINT `USER_MAPPING_FK`
-  FOREIGN KEY (`mapping_id`)
-  REFERENCES `capm`.`mapping_master` (`id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
-
 
 ALTER TABLE `capm`.`role_master`
 ADD COLUMN `mapping_id` INT NULL AFTER `status`,
